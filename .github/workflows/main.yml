@@ -1,0 +1,28 @@
+name: Pipeline SaludPlus
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Traer codigo
+        uses: actions/checkout@v4
+        
+      - name: Instalar Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Compilar SaludPlus
+        
+        run: |
+          POM_PATH=$(find . -name "pom.xml" | head -n 1)
+          DIR_PATH=$(dirname "$POM_PATH")
+          cd "$DIR_PATH"
+          mvn package -DskipTests
